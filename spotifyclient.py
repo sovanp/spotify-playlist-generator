@@ -1,4 +1,5 @@
 import json
+from urllib import response
 
 import requests
 
@@ -32,6 +33,41 @@ class SpotifyClient:
         tracks = [Track(track["name"], track["id"], track["artists"][0]["name"]) for
                   track in response_json["tracks"]]
         return tracks
+
+    def create_playlist(self, name):
+        data = json.dumps({
+            "name": name,
+            "description": "Recommended tracks",
+            "public": True
+        })
+        url = f"https://api.spotify.com/v1/users/{self.user_id}/playlists"
+        response = self._place_post_api_request(url, data)
+        response_json = response.json()
+
+        # create playlist
+        playlist_id = response_json["id"]
+        playlist = Playlist(name, playlist_id)
+        return playlist
+
+    # Adds tracks tro a playlist
+    def populate_playlist(self, playlist, tracks):
+        track_uris = [track.create_spotify_uri() for track in tracks]
+        data = json.dumps(track_uris)
+        url = f"https://api.spotify.com/v1/playlists/{playlist.id}/tracks"
+        response = self._place_post_api_request(url, data)
+        response_json = response.json()
+        return response_json
+
+
+    def _place_post_api_request(self, url, data):
+        response = requests.post(
+            url,
+            data=data,
+            headers={
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {self.authorization_token}"
+            }
+        )
 
     def _place_get_api_request(self, url):
         response = requests.get(
