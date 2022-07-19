@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 def main():
     # Load the .env file
-    load_dotenv
+    load_dotenv()
 
     # Instantiate client
     spotify_client = SpotifyClient(os.getenv("SPOTIFY_AUTHORIZATION_TOKEN"), os.getenv("SPOTIFY_USER_ID"))

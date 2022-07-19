@@ -1,2 +1,6 @@
 # Environment variable
 .env
+
+# Others
+__pycache__/*
+venv/*
