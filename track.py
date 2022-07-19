@@ -10,4 +10,4 @@ class Track:
         return f"spotify:track:{self.id}"
 
     def __str__(self):
-        return "f{self.name} by {self.artist}"
+        return self.name + " by " + self.artist
